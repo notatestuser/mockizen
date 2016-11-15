@@ -1,0 +1,16 @@
+{
+  "routes": {
+    "/test-200": {
+      "get": "mocks/success.json"
+    },
+    "/users": {
+       "get": "mocks/users.js",
+       "/create": {
+          "put": 204
+       },
+       "/:id": {
+          "get": "mocks/user.js"
+       }
+    }
+  }
+}
