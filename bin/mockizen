@@ -31,7 +31,7 @@ const app = require('../src/server')(scenarios, scenariosPath);
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '8090');
+const port = normalizePort(process.env.PORT || scenarios.port || '8090');
 app.set('port', port);
 
 /**
