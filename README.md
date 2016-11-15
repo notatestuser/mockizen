@@ -16,6 +16,7 @@ After cloning this...
 ```bash
 $ npm install
 $ npm start
+$ open http://localhost:8090/users
 ```
 
 ## Using it for real
