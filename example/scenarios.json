@@ -1,4 +1,9 @@
 {
+  "port": 8090,
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*"
+  },
   "routes": {
     "/test-200": {
       "get": "mocks/success.json"
