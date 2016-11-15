@@ -1,6 +1,6 @@
 {
   "name": "mockizen",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "start": "node --harmony ./bin/mockizen example/scenarios.json",
     "mocks:start": "mockizen scenarios.json"
