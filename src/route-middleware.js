@@ -1,9 +1,10 @@
+const path = require('path');
 const fs = require('fs');
 const vm = require('vm');
 
 const verbose = process.env.NODE_ENV === 'test';
 
-module.exports = function(filePath, fileType) {
+module.exports = function(filePath, fileType, basePath) {
   let lastMTime = null;
   let isUpdating = null;
   let middleware = null;
@@ -15,7 +16,14 @@ module.exports = function(filePath, fileType) {
           res.json(JSON.parse(data));
         };
       case 'js':
-        const sandbox = { module: {}, require };
+        const newRequire = function(modPath) {
+          let resolved = modPath;
+          if (path.parse(modPath).dir !== '') {
+            resolved = path.resolve(basePath, modPath);
+          }
+          return module.require(resolved);
+        };
+        const sandbox = { module: {}, require: newRequire };
         vm.runInNewContext(data, sandbox);
         return sandbox.module.exports;
     }
