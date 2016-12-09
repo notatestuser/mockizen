@@ -3,10 +3,6 @@ const createMiddleware = require('./route-middleware');
 
 const verbose = process.env.NODE_ENV === 'test';
 
-function makePath(base, p) {
-  return path.resolve(base, p);
-}
-
 module.exports = function mapper(app, basePath, cfg, route) {
   route = route || '';
   for (var key in cfg) {
@@ -25,7 +21,7 @@ module.exports = function mapper(app, basePath, cfg, route) {
       // get: "./mocks/file.json"
       case 'string':
         if (verbose) console.log('%s %s', key, route);
-        const filePath = makePath(basePath, cfg[key]);
+        const filePath = path.resolve(basePath, cfg[key]);
         let fileType;
         if (cfg[key].match(/\.json$/)) {
           fileType = 'json';
@@ -34,7 +30,7 @@ module.exports = function mapper(app, basePath, cfg, route) {
         } else {
           throw new Error('Unsupported file extension :(');
         }
-        const middleware = createMiddleware(filePath, fileType);
+        const middleware = createMiddleware(filePath, fileType, basePath);
         app[key](route, middleware);
         break;
       // todo: handle other cases
