@@ -36,7 +36,8 @@ Check `example/scenarios.json` for an example.
 
 ## Future work
 
+- [x] Live data reload
+- [ ] Live scenarios reload
 - [ ] Swagger import
 - [ ] REST routes generator
 - [ ] Front page
-- [ ] Live scenarios reload
