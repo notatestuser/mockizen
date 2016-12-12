@@ -23,17 +23,30 @@ module.exports = function(filePath, fileType, basePath) {
           }
           return module.require(resolved);
         };
-        const sandbox = { module: {}, require: newRequire };
+        const sandbox = {
+          module: {
+            exports: {},
+            require: newRequire,
+          },
+          require: newRequire
+        };
         vm.runInNewContext(data, sandbox);
         return sandbox.module.exports;
     }
   }
 
   function updateFile(cb) {
-    if (isUpdating) return;
+    if (isUpdating) {
+      cb && cb();
+      return;
+    }
     isUpdating = true;
     fs.stat(filePath, function(err, stat) {
-      if (err) throw err;
+      if (err) {
+        if (cb) cb(err);
+        else throw err; // unhandled
+        return;
+      }
       if (lastMTime && stat.mtime.getTime() === lastMTime.getTime()) {
         if (verbose) console.log('no update needed: %s',
             filePath, fileType);
@@ -45,7 +58,11 @@ module.exports = function(filePath, fileType, basePath) {
           stat.mtime.getTime(), lastMTime && lastMTime.getTime());
       lastMTime = stat.mtime;
       fs.readFile(filePath, 'utf8', function(_err, data) {
-        if (_err) throw _err;
+        if (_err) {
+          if (cb) cb(_err);
+          else throw _err; // unhandled
+          return;
+        }
         middleware = createMiddleware(data);
         isUpdating = false;
         cb && cb();
@@ -53,13 +70,31 @@ module.exports = function(filePath, fileType, basePath) {
     });
   }
 
+  function handleError(res, err) {
+    res.status(500).json({
+      ok: false,
+      error: err.message || err,
+      file: filePath,
+    });
+    return;
+  }
+
   updateFile();  // first cache
 
-  return function(/* req, res, ... */) {
+  return function(req, res) {
     const that = this;
     const args = arguments;
-    updateFile(function() {
-      middleware.apply(that, args);
+    updateFile(function(err) {
+      if (err) {
+        handleError(res, err);
+        return;
+      }
+      try {
+        middleware.apply(that, args);
+      } catch (_err) {
+        handleError(res, _err);
+        return;
+      }
     });
   };
 };
