@@ -28,7 +28,8 @@ module.exports = function(filePath, fileType, basePath) {
             exports: {},
             require: newRequire,
           },
-          require: newRequire
+          require: newRequire,
+          __dirname: path.parse(filePath).dir,
         };
         vm.runInNewContext(data, sandbox);
         return sandbox.module.exports;
