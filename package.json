@@ -1,6 +1,6 @@
 {
   "name": "mockizen",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "bin": "./bin/mockizen",
   "repository": "notatestuser/mockizen",
   "scripts": {
