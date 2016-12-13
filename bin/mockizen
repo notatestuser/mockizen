@@ -16,12 +16,16 @@ if (process.argv.length < 3) {
  */
 const http = require('http');
 const path = require('path');
+const colors = require('colors/safe');
+const pkg = require('../package.json');
 
 /**
  * Load scenarios.
  */
 const scenariosPath = path.resolve(process.cwd(), process.argv[2]);
 const scenarios = require(scenariosPath);
+
+console.info(colors.bold(`${pkg.name} v${pkg.version}\n`));
 
 /**
  * Init server routes.
@@ -100,5 +104,5 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  console.log('\nServing on ' + bind);
+  console.log('Serving on ' + bind);
 }
