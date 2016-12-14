@@ -16,6 +16,14 @@
        "/:id": {
           "get": "mocks/user.js"
        }
+    },
+    "/stores": {
+      "/session": {
+        "get": "mocks/stores/session-store.js"
+      },
+      "/persistent": {
+        "get": "mocks/stores/persistent-store.js"
+      }
     }
   }
 }
