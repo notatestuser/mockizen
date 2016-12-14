@@ -36,6 +36,7 @@ Check `example/scenarios.json` for an example.
 
 ## Future work
 
+- [x] Stores
 - [x] Live data reload
 - [ ] Live scenarios reload
 - [ ] Swagger import

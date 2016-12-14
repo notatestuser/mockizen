@@ -1,6 +1,9 @@
-const path = require('path');
+'use strict';
+
 const fs = require('fs');
 const vm = require('vm');
+
+const createSandbox = require('./sandbox-factory');
 
 const verbose = process.env.NODE_ENV === 'test';
 
@@ -10,29 +13,17 @@ module.exports = function(filePath, fileType, basePath) {
   let middleware = null;
 
   function createMiddleware(data) {
-    switch(fileType) {
+    switch (fileType) {
       case 'json':
         return function(req, res) {
           res.json(JSON.parse(data));
         };
-      case 'js':
-        const newRequire = function(modPath) {
-          let resolved = modPath;
-          if (path.parse(modPath).dir !== '') {
-            resolved = path.resolve(basePath, modPath);
-          }
-          return module.require(resolved);
-        };
-        const sandbox = {
-          module: {
-            exports: {},
-            require: newRequire,
-          },
-          require: newRequire,
-          __dirname: path.parse(filePath).dir,
-        };
+      case 'js':  // eslint-disable-line no-case-declarations
+        const sandbox = createSandbox(filePath, basePath);
         vm.runInNewContext(data, sandbox);
         return sandbox.module.exports;
+      default:
+        throw new Error(`Unknown file type provided: ${fileType}`);
     }
   }
 

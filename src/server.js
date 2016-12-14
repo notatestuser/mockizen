@@ -24,8 +24,9 @@ module.exports = function(scenarios, scenariosPath) {
     next();
   });
 
-  // add scenario `routes`
-  app.map(app, path.resolve(scenariosPath, '..'), scenarios.routes);
+  // add scenario routes
+  const basePath = path.resolve(scenariosPath, '..') + path.sep;
+  app.map(app, basePath, scenarios.routes);
 
   // catch 404s
   app.use(function(req, res, next) {
