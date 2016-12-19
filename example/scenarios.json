@@ -8,6 +8,9 @@
     "/test-200": {
       "get": "mocks/success.json"
     },
+    "/test-delay": {
+      "get": "mocks/delayed.js"
+    },
     "/users": {
        "get": "mocks/users.js",
        "/create": {
