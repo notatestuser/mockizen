@@ -7,6 +7,9 @@
     "start": "node --harmony ./bin/mockizen example/scenarios.json",
     "mocks:start": "mockizen scenarios.json"
   },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "dependencies": {
     "body-parser": "^1.15.2",
     "colors": "^1.1.2",
