@@ -39,6 +39,7 @@ Check `example/scenarios.json` for an example.
 - [x] Stores
 - [x] Live data reload
 - [ ] Live scenarios reload
+- [ ] Artificial delays & errors
 - [ ] Swagger import
 - [ ] REST routes generator
 - [ ] Front page

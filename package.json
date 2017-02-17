@@ -1,11 +1,14 @@
 {
   "name": "mockizen",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "bin": "./bin/mockizen",
   "repository": "notatestuser/mockizen",
   "scripts": {
     "start": "node --harmony ./bin/mockizen example/scenarios.json",
     "mocks:start": "mockizen scenarios.json"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
