@@ -63,9 +63,7 @@ module.exports = function createSandbox(filePath, basePath) {
       log: (line) => {
         console.log.apply(console, [
           `(log: ${path.relative(basePath, filePath)}) ${line}`
-        ].concat(
-          Array.prototype.slice.call(arguments, 1)
-        ))
+        ])
       }
     },
     getSessionStore: () =>
