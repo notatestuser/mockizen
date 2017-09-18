@@ -38,12 +38,20 @@ const GLOBALS_WHITELIST = {
 };
 
 module.exports = function createSandbox(filePath, basePath) {
+  const fileDirname = path.parse(filePath).dir;
   const newRequire = function require(modPath) {
     let resolved = modPath;
     if (path.parse(modPath).dir !== '') {
+      // try resolving basepath + modpath
       resolved = path.resolve(basePath, modPath);
     }
-    return module.require(resolved);
+    try {
+      return module.require(resolved);
+    } catch (e) {
+      // try resolving filepath + modpath
+      resolved = path.resolve(fileDirname, modPath);
+      return module.require(resolved);
+    }
   };
   const base = Object
     .getOwnPropertyNames(global)
@@ -53,7 +61,7 @@ module.exports = function createSandbox(filePath, basePath) {
       return sbx;
     }, {});
   const sandbox = Object.assign(base, {
-    __dirname: path.parse(filePath).dir,
+    __dirname: fileDirname,
     require: newRequire,
     module: {
       exports: {},

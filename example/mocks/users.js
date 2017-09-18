@@ -1,7 +1,7 @@
 'use strict';
 
 // require is relative from the dir containing scenarios.json
-const fakeData = require('./mocks/_common/fake-data');
+const fakeData = require('./_common/fake-data');
 
 const MAX_USERS = 20;
 
