@@ -5,16 +5,18 @@ const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
-const app = express();
+const _app = express();
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
+_app.use(logger('dev'));
+_app.use(bodyParser.json());
 
-// route mapper: turns config.json into routes
-app.map = require('./route-parser');
+module.exports = function(scenariosPath, app = _app, handle404 = true) {
+  const scenarios = require(scenariosPath);
 
-module.exports = function(scenarios, scenariosPath) {
-  console.info('Building routes');
+  // route mapper: turns scenarios into routes
+  app.map = require('./route-parser');
+
+  console.info('[mockizen] Adding routes');
 
   // apply `headers`
   app.use(function(req, res, next) {
@@ -28,21 +30,23 @@ module.exports = function(scenarios, scenariosPath) {
   const basePath = path.resolve(scenariosPath, '..') + path.sep;
   app.map(app, basePath, scenarios.routes);
 
-  // catch 404s
-  app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
+  if (handle404) {
+    // catch 404s
+    app.use(function(req, res, next) {
+      var err = new Error('Not Found');
+      err.status = 404;
+      next(err);
+    });
 
-  // handle errors
-  app.use(function(err, req, res) {
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // handle errors
+    app.use(function(err, req, res) {
+      res.locals.message = err.message;
+      res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    res.status(err.status || 500);
-    res.json({ Error: err.message });
-  });
+      res.status(err.status || 500);
+      res.json({ Error: err.message });
+    });
+  }
 
   return app;
 };

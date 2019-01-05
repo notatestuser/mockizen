@@ -23,19 +23,18 @@ const pkg = require('../package.json');
  * Load scenarios.
  */
 const scenariosPath = path.resolve(process.cwd(), process.argv[2]);
-const scenarios = require(scenariosPath);
 
 console.info(colors.bold(`${pkg.name} v${pkg.version}\n`));
 
 /**
  * Init server routes.
  */
-const app = require('../src/server')(scenarios, scenariosPath);
+const app = require('../src/server')(scenariosPath);
 
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || scenarios.port || '8090');
+const port = normalizePort(process.env.PORT || require(scenariosPath).port || '8090');
 app.set('port', port);
 
 /**
@@ -104,5 +103,5 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  console.log('Serving on ' + bind);
+  console.log('[mockizen] Serving on ' + bind);
 }

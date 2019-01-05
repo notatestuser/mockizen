@@ -2,6 +2,7 @@
   "name": "mockizen",
   "version": "1.0.1",
   "bin": "./bin/mockizen",
+  "main": "./src/server",
   "repository": "notatestuser/mockizen",
   "scripts": {
     "start": "node --harmony ./bin/mockizen example/scenarios.json",
